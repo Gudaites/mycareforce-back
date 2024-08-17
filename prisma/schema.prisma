@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CountryEnum {
+  BRAZIL
+  PORTUGAL
+}
+
+enum DayOfWeekEnum {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model HealthUnit {
+  id      String @id @default(uuid(7))
+  name    String
+  address String
+  shifts  Shit[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HealthUnitAddress {
+  id            String  @id @default(uuid(7))
+  address       String
+  addressNumber String
+  city          String
+  complement    String?
+  district      String
+  zipCode       String
+  state         String
+  country       String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Shit {
+  id            String        @id @default(uuid(7))
+  dayOfWeek     DayOfWeekEnum
+  startTime     String
+  endTime       String
+  available     String
+  healthUnitId  String
+  healthUnit    HealthUnit    @relation(fields: [healthUnitId], references: [id])
+  slots         Int
+  enrolledUsers User[]        @relation("UserShifts")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id        String   @id @default(uuid(7))
+  name      String
+  email     String   @unique
+  password  String
+  shits     Shit[]   @relation("UserShifts")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
