@@ -1,4 +1,11 @@
-import { Controller, Get, HttpCode, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { GetAvailableSlotsByHealthUnitIdService } from './services/get-available-slots-by-health-unit-id.service';
 import {
   ApiBearerAuth,
@@ -9,6 +16,7 @@ import {
 import { GetAvailableSlotsByHealthUnitIdResponseDTO } from './dto/response/get-available-slots-by-health-unit-id-response.dto';
 import { GetAvailableSlotsByHealthUnitIdParamDTO } from './dto/params/get-available-slots-by-health-unit-id-params.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 
 @ApiTags('Available Slots')
 @Controller('available-slots')
@@ -28,6 +36,9 @@ export class AvailableSlotsController {
   })
   @Get(':healthUnitId')
   @ApiBearerAuth()
+  @UseInterceptors(
+    new TransformInterceptor(GetAvailableSlotsByHealthUnitIdResponseDTO),
+  )
   async getAvailableSlotsByHealthUnitId(
     @Param() param: GetAvailableSlotsByHealthUnitIdParamDTO,
   ) {

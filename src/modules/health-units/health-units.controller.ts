@@ -1,4 +1,10 @@
-import { Controller, Get, HttpCode, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FindAllHealthService } from './services/find-all-health-units.service';
 import {
   ApiBearerAuth,
@@ -8,6 +14,7 @@ import {
 } from '@nestjs/swagger';
 import { FindAllHealthResponseDTO } from './dto/response/find-all-health-response.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 
 @ApiTags('Health Units')
 @Controller('health-units')
@@ -25,6 +32,7 @@ export class HealthUnitsController {
   })
   @Get()
   @ApiBearerAuth()
+  @UseInterceptors(new TransformInterceptor(FindAllHealthResponseDTO))
   async findAll() {
     return this.findAllHealthService.execute();
   }
