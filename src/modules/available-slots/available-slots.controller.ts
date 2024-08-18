@@ -1,11 +1,18 @@
-import { Controller, Get, HttpCode, Param } from '@nestjs/common';
+import { Controller, Get, HttpCode, Param, UseGuards } from '@nestjs/common';
 import { GetAvailableSlotsByHealthUnitIdService } from './services/get-available-slots-by-health-unit-id.service';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetAvailableSlotsByHealthUnitIdResponseDTO } from './dto/response/get-available-slots-by-health-unit-id-response.dto';
 import { GetAvailableSlotsByHealthUnitIdParamDTO } from './dto/params/get-available-slots-by-health-unit-id-params.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @ApiTags('Available Slots')
 @Controller('available-slots')
+@UseGuards(AuthGuard)
 export class AvailableSlotsController {
   constructor(
     private readonly getAvailableSlotsByHealthUnitIdService: GetAvailableSlotsByHealthUnitIdService,
@@ -20,6 +27,7 @@ export class AvailableSlotsController {
     type: [GetAvailableSlotsByHealthUnitIdResponseDTO],
   })
   @Get(':healthUnitId')
+  @ApiBearerAuth()
   async getAvailableSlotsByHealthUnitId(
     @Param() param: GetAvailableSlotsByHealthUnitIdParamDTO,
   ) {

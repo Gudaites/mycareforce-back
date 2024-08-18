@@ -34,6 +34,6 @@ export class LoginService {
       );
     }
 
-    return this.createTokensService.execute(email);
+    return this.createTokensService.execute(existUser.id, existUser.email);
   }
 }

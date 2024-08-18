@@ -9,10 +9,10 @@ export class CreateTokensService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async execute(email: string) {
+  async execute(id: string, email: string) {
     const [accessToken, refreshToken] = await Promise.all([
-      this.generateAccessTokenForMember(email),
-      this.generateRefreshToken(email),
+      this.generateAccessTokenForMember(id, email),
+      this.generateRefreshToken(id, email),
     ]);
 
     return {
@@ -21,27 +21,33 @@ export class CreateTokensService {
     };
   }
 
-  private generateAccessTokenForMember(email: string): string {
+  private generateAccessTokenForMember(id: string, email: string): string {
     const issuer = this.configService.get<string>('JWT_ISSUER');
     const secret = this.configService.get<string>('JWT_SECRET');
     const expiresIn = this.configService.get<string>('JWT_EXPIRATION_TIME');
 
     const payload = {
-      email,
+      user: {
+        id,
+        email,
+      },
       token_type: 'access',
     };
 
     return this.jwtService.sign(payload, { issuer, expiresIn, secret });
   }
 
-  private generateRefreshToken(email: string): string {
+  private generateRefreshToken(id: string, email: string): string {
     // Possivelmente adicionar regra para bloquear acesso
     const issuer = this.configService.get<string>('JWT_ISSUER');
     const secret = this.configService.get<string>('JWT_SECRET');
     const expiresIn = this.configService.get<string>('JWT_REFRESH_TIME');
 
     const payload = {
-      email,
+      user: {
+        id,
+        email,
+      },
       token_type: 'refresh',
     };
 
