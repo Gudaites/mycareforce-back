@@ -7,7 +7,7 @@ import { SeederService } from './seeder/seeder.service';
 import { SeederModule } from './seeder/seeder.module';
 import { HealthUnitsModule } from './modules/health-units/health-units.module';
 import { AvailableSlotsModule } from './modules/available-slots/available-slots.module';
-import { UsersModule } from './modules/users/users.module';
+import { RegistrationsModule } from './modules/registrations/registrations.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { UsersModule } from './modules/users/users.module';
     UtilsModule,
     HealthUnitsModule,
     AvailableSlotsModule,
-    UsersModule,
+    RegistrationsModule,
   ],
   controllers: [],
   providers: [],
