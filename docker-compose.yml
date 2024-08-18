@@ -2,16 +2,20 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:15
+    image: bitnami/mysql:5.7
+    container_name: mysql
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: toor
-      POSTGRES_DB: backend-test
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     ports:
-      - "5432:5432"
+      - '3306:3306'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mysql_data:/bitnami/mysql/data
+    tmpfs:
+      - /var/lib/mysql
 
 volumes:
-  postgres_data:
+  mysql_data:

@@ -5,6 +5,7 @@ import { UtilsModule } from './utils/utils.module';
 import { ConfigModule } from '@nestjs/config';
 import { SeederService } from './seeder/seeder.service';
 import { SeederModule } from './seeder/seeder.module';
+import { HealthUnitsModule } from './modules/health-units/health-units.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { SeederModule } from './seeder/seeder.module';
     AuthModule,
     PrismaModule,
     UtilsModule,
+    HealthUnitsModule,
   ],
   controllers: [],
   providers: [],
