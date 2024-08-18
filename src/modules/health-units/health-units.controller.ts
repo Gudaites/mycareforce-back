@@ -14,10 +14,10 @@ export class HealthUnitsController {
   })
   @ApiOkResponse({
     description: 'Result of this route',
-    type: FindAllHealthResponseDTO,
+    type: [FindAllHealthResponseDTO],
   })
   @Get()
-  findAll() {
+  async findAll() {
     return this.findAllHealthService.execute();
   }
 }

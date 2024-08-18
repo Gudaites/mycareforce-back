@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { SeederService } from './seeder/seeder.service';
 import { SeederModule } from './seeder/seeder.module';
 import { HealthUnitsModule } from './modules/health-units/health-units.module';
+import { AvailableSlotsModule } from './modules/available-slots/available-slots.module';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { HealthUnitsModule } from './modules/health-units/health-units.module';
     PrismaModule,
     UtilsModule,
     HealthUnitsModule,
+    AvailableSlotsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
