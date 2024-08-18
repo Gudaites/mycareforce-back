@@ -18,7 +18,7 @@ export class GetAvailableSlotsByHealthUnitIdService {
     const startIn3hours = DateTime.now().plus({ hours: 3 }).toISO();
 
     const result: IAvailableSlot[] = await this.prismaService
-      .$queryRaw`SELECT * FROM AvailableSlot WHERE healthUnitId = ${healthUnitId} AND startTime >= ${startIn3hours} AND booked < capacity`;
+      .$queryRaw`SELECT * FROM AvailableSlot WHERE healthUnitId = ${healthUnitId} AND startTime >= ${startIn3hours} AND booked < capacity ORDER BY startTime asc`;
 
     return result;
   }

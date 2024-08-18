@@ -1,8 +1,15 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { LoginService } from './services/login.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { LoginBodyDTO } from './dto/login-body.dto';
 import { LoginResponseDTO } from './dto/login-response.dto';
+import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -18,6 +25,7 @@ export class AuthController {
     type: LoginResponseDTO,
   })
   @Post('login')
+  @UseInterceptors(new TransformInterceptor(LoginResponseDTO))
   async login(@Body() body: LoginBodyDTO) {
     return this.loginService.execute(body);
   }

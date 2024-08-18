@@ -34,6 +34,14 @@ export class LoginService {
       );
     }
 
-    return this.createTokensService.execute(existUser.id, existUser.email);
+    const tokens = await this.createTokensService.execute(
+      existUser.id,
+      existUser.email,
+    );
+
+    return {
+      ...tokens,
+      user: existUser,
+    };
   }
 }
