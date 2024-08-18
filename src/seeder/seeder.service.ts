@@ -193,20 +193,20 @@ export class SeederService {
       },
       {
         id: '0191624d-4117-7767-ae0d-5e66397f7a3d',
-        startTime: new Date('2024-08-19 09:00'),
-        endTime: new Date('2024-08-19 21:00'),
+        startTime: new Date('2024-09-19 09:00'),
+        endTime: new Date('2024-09-19 21:00'),
         healthUnitId: units[0].id,
       },
       {
         id: '0191624d-68c6-7a84-b019-58b5843bcc7f',
-        startTime: new Date('2024-08-19 09:00'),
-        endTime: new Date('2024-08-19 21:00'),
+        startTime: new Date('2024-09-19 09:00'),
+        endTime: new Date('2024-09-19 21:00'),
         healthUnitId: units[1].id,
       },
       {
         id: '0191624d-8fc2-7957-9d29-78e3bb252702',
-        startTime: new Date('2024-08-19 09:00'),
-        endTime: new Date('2024-08-19 21:00'),
+        startTime: new Date('2024-09-19 09:00'),
+        endTime: new Date('2024-09-19 21:00'),
         healthUnitId: units[1].id,
       },
     ];

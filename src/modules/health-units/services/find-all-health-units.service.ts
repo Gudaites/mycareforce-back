@@ -16,7 +16,7 @@ export class FindAllHealthService {
       FROM HealthUnit hu
       JOIN AvailableSlot aslot
           ON hu.id = aslot.healthUnitId
-      WHERE aslot.starttime >= ${startIn3hours}
+      WHERE aslot.starttime >= ${startIn3hours} AND aslot.booked < aslot.capacity
       GROUP BY hu.id
       ORDER BY next_slot_time ASC
       LIMIT 10 OFFSET 0

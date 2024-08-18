@@ -28,11 +28,11 @@ export class GetAvailableSlotsByHealthUnitIdResponseDTO {
   @IsNumber()
   @IsNotEmpty()
   @Expose()
-  slots: number;
+  capacity: number;
 
   @ApiProperty({ example: 1, required: true })
   @IsNumber()
   @IsNotEmpty()
   @Expose()
-  availableSlots: number;
+  booked: number;
 }

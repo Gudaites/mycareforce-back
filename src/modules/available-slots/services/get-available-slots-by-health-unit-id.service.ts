@@ -2,6 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+export interface IAvailableSlot {
+  id: string;
+  startTime: Date;
+  endTime: Date;
+  healthUnitId: string;
+  booked: number;
+  capacity: number;
+}
 @Injectable()
 export class GetAvailableSlotsByHealthUnitIdService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -9,29 +17,9 @@ export class GetAvailableSlotsByHealthUnitIdService {
   async execute(healthUnitId: string) {
     const startIn3hours = DateTime.now().plus({ hours: 3 }).toISO();
 
-    const result = await this.prismaService.availableSlot.findMany({
-      include: {
-        _count: {
-          select: {
-            registrations: true,
-          },
-        },
-      },
-      where: {
-        healthUnitId,
-        startTime: {
-          gte: startIn3hours,
-        },
-      },
-    });
+    const result: IAvailableSlot[] = await this.prismaService
+      .$queryRaw`SELECT * FROM AvailableSlot WHERE healthUnitId = ${healthUnitId} AND startTime >= ${startIn3hours} AND booked < capacity`;
 
-    const response = result.map((item) => {
-      return {
-        ...item,
-        availableSlots: item.slots - item._count.registrations,
-      };
-    });
-
-    return response;
+    return result;
   }
 }
