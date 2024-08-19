@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class GetAvailableSlotsByHealthUnitIdResponseDTO {
   @ApiProperty({
@@ -35,4 +35,10 @@ export class GetAvailableSlotsByHealthUnitIdResponseDTO {
   @IsNotEmpty()
   @Expose()
   booked: number;
+
+  @ApiProperty({ example: false, required: true })
+  @IsBoolean()
+  @Expose()
+  @Type(() => Boolean)
+  isScheduled: boolean;
 }

@@ -17,6 +17,8 @@ import { GetAvailableSlotsByHealthUnitIdResponseDTO } from './dto/response/get-a
 import { GetAvailableSlotsByHealthUnitIdParamDTO } from './dto/params/get-available-slots-by-health-unit-id-params.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
+import { UserAuth } from 'src/decorators/user.decorator';
+import { IUserAuth } from 'src/decorators/interfaces/user-auth.interface';
 
 @ApiTags('Available Slots')
 @Controller('available-slots')
@@ -40,9 +42,11 @@ export class AvailableSlotsController {
     new TransformInterceptor(GetAvailableSlotsByHealthUnitIdResponseDTO),
   )
   async getAvailableSlotsByHealthUnitId(
+    @UserAuth() user: IUserAuth,
     @Param() param: GetAvailableSlotsByHealthUnitIdParamDTO,
   ) {
     return this.getAvailableSlotsByHealthUnitIdService.execute(
+      user.id,
       param.healthUnitId,
     );
   }

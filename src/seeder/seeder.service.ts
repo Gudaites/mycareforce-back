@@ -14,6 +14,11 @@ export class SeederService {
         email: 'hgudaites@gmail.com',
         password: bcrypt.hashSync('teste123', 10),
       },
+      {
+        name: 'teste teste',
+        email: 'teste@gmail.com',
+        password: bcrypt.hashSync('teste123', 10),
+      },
     ];
 
     for await (const user of users) {
