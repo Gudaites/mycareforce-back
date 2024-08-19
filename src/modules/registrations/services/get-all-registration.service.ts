@@ -13,6 +13,9 @@ export class GetAllRegistrationsService {
             userId,
           },
         },
+        startTime: {
+          gte: new Date(),
+        },
       },
       orderBy: {
         startTime: 'asc',
