@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   UseGuards,
@@ -13,12 +14,14 @@ import { IUserAuth } from 'src/decorators/interfaces/user-auth.interface';
 import { ApiBearerAuth, ApiOkResponse, ApiOperation } from '@nestjs/swagger';
 import { PostRegistrationInterestResponseDTO } from './dto/response/post-registration-interest.dto';
 import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
+import { GetAllRegistrationsService } from './services/get-all-registration.service';
 
 @Controller('registrations')
 @UseGuards(AuthGuard)
 export class RegistrationsController {
   constructor(
     private readonly postRegistrationInterestService: PostRegistrationInterestService,
+    private readonly getAllRegistrationsService: GetAllRegistrationsService,
   ) {}
 
   @HttpCode(201)
@@ -44,5 +47,11 @@ export class RegistrationsController {
       availableSlotId,
       user.id,
     );
+  }
+
+  @ApiBearerAuth()
+  @Get('')
+  getAllRegister(@UserAuth() user: IUserAuth) {
+    return this.getAllRegistrationsService.execute(user.id);
   }
 }

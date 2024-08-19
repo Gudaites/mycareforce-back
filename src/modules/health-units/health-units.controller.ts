@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   HttpCode,
-  Param,
   Query,
   UseGuards,
   UseInterceptors,
@@ -42,7 +41,6 @@ export class HealthUnitsController {
     @UserAuth() user: IUserAuth,
     @Query() param: FindAllHealthParamDTO,
   ) {
-    console.log(param);
     return this.findAllHealthService.execute(user.id, param);
   }
 }

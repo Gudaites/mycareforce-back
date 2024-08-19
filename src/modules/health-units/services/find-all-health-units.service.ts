@@ -8,7 +8,6 @@ export class FindAllHealthService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async execute(userId: string, params: { take?: number; skip?: number }) {
-    console.log(params);
     const now = DateTime.now();
     const startIn3hours = now.plus({ hours: 3 }).toISO();
 
