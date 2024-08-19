@@ -7,7 +7,8 @@ import { IFindAllHealth } from '../interfaces/find-all-health.interface';
 export class FindAllHealthService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async execute(userId: string) {
+  async execute(userId: string, params: { take?: number; skip?: number }) {
+    console.log(params);
     const now = DateTime.now();
     const startIn3hours = now.plus({ hours: 3 }).toISO();
 
@@ -28,9 +29,23 @@ export class FindAllHealthService {
         AND (aslot.booked < aslot.capacity OR r.userId IS NOT NULL)
       GROUP BY hu.id
       ORDER BY next_slot_time ASC
-      LIMIT 10 OFFSET 0
+      LIMIT ${params.take || 10} OFFSET ${params.skip || 0}
     `;
 
-    return healthUnits;
+    const totalCount = await this.prismaService.$queryRaw<any[]>`
+      SELECT 
+        COUNT(DISTINCT hu.id) as count
+      FROM HealthUnit hu
+      JOIN AvailableSlot aslot
+        ON hu.id = aslot.healthUnitId
+      LEFT JOIN Registration r
+        ON aslot.id = r.availableSlotId 
+        AND r.userId = ${userId}
+      WHERE 
+        aslot.startTime >= ${startIn3hours}
+        AND (aslot.booked < aslot.capacity OR r.userId IS NOT NULL)
+    `;
+
+    return { healthUnits, total: Number(totalCount[0].count) };
   }
 }

@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Expose, Type } from 'class-transformer';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class FindAllHealthResponseDTO {
+class UnitDto {
   @ApiProperty({
     example: '01916203-349f-78f3-a97a-df131000f31c',
     required: true,
@@ -29,4 +29,18 @@ export class FindAllHealthResponseDTO {
   @IsNotEmpty()
   @Expose()
   next_slot_time: string;
+}
+
+export class FindAllHealthResponseDTO {
+  @ApiProperty({ type: [UnitDto], required: true })
+  @IsArray()
+  @Expose()
+  @Type(() => UnitDto)
+  healthUnits: UnitDto[];
+
+  @ApiProperty({ example: 20, required: true })
+  @IsNumber()
+  @IsNotEmpty()
+  @Expose()
+  total: number;
 }

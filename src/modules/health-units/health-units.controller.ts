@@ -2,6 +2,8 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
+  Query,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,6 +19,7 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { TransformInterceptor } from 'src/interceptors/transform.interceptor';
 import { IUserAuth } from 'src/decorators/interfaces/user-auth.interface';
 import { UserAuth } from 'src/decorators/user.decorator';
+import { FindAllHealthParamDTO } from './dto/param/find-all-health-param.dto';
 
 @ApiTags('Health Units')
 @Controller('health-units')
@@ -26,16 +29,20 @@ export class HealthUnitsController {
 
   @HttpCode(200)
   @ApiOperation({
-    summary: 'Route to Login',
+    summary: 'Route to get all available units',
   })
   @ApiOkResponse({
     description: 'Result of this route',
-    type: [FindAllHealthResponseDTO],
+    type: FindAllHealthResponseDTO,
   })
   @Get()
   @ApiBearerAuth()
   @UseInterceptors(new TransformInterceptor(FindAllHealthResponseDTO))
-  async findAll(@UserAuth() user: IUserAuth) {
-    return this.findAllHealthService.execute(user.id);
+  async findAll(
+    @UserAuth() user: IUserAuth,
+    @Query() param: FindAllHealthParamDTO,
+  ) {
+    console.log(param);
+    return this.findAllHealthService.execute(user.id, param);
   }
 }
