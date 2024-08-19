@@ -17,6 +17,7 @@ export class LoginService {
     const existUser = await this.prismaService.user.findUnique({
       where: {
         email,
+        isBanned: false,
       },
     });
 

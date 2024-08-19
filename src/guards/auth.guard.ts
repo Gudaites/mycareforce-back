@@ -1,18 +1,24 @@
 import {
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ITokenDecode } from './interfaces/token-decode.interface';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly JwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly prismaService: PrismaService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -32,6 +38,23 @@ export class AuthGuard implements CanActivate {
         issuer,
         secret,
       });
+
+      const isOnBlackList = await this.cacheManager.get(
+        `blacklist:${decodedToken.user.id}`,
+      );
+
+      if (isOnBlackList) {
+        await this.prismaService.user.update({
+          where: {
+            id: decodedToken.user.id,
+          },
+          data: {
+            isBanned: true,
+          },
+        });
+
+        throw new UnauthorizedException('Não autorizado');
+      }
 
       if (decodedToken.token_type !== 'access') {
         throw new UnauthorizedException('Não autorizado');
